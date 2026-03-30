@@ -7,9 +7,11 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
@@ -114,17 +116,21 @@ fun HomeLinksScreen(modifier: Modifier = Modifier) {
         Text(text = "Useful links")
 
         homeLinks.forEach { link ->
-            Button(
-                onClick = {
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(link.url))
-                    try {
-                        context.startActivity(intent)
-                    } catch (_: ActivityNotFoundException) {
-                        // No app can handle this link.
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable {
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(link.url))
+                        try {
+                            context.startActivity(intent)
+                        } catch (_: ActivityNotFoundException) {
+                            // No app can handle this link.
+                        }
                     }
-                }
+                    .padding(vertical = 8.dp)
             ) {
                 Text(text = link.name)
+                Text(text = link.url)
             }
         }
     }
