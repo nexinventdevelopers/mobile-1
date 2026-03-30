@@ -8,12 +8,22 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
@@ -27,6 +37,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.dp
 import com.example.myapplication.ui.theme.MyApplicationTheme
 
@@ -90,31 +101,132 @@ enum class AppDestinations(
     PROFILE("Profile", R.drawable.ic_account_box),
 }
 
-data class WebsiteLink(val name: String, val url: String)
+data class WebsiteLink(
+    val name: String,
+    val url: String,
+    val emoji: String,
+    val description: String,
+)
+
+data class CreativePrompt(val title: String, val prompt: String)
 
 private val homeLinks = listOf(
-    WebsiteLink("Nexinvent Solutions", "https://www.nexinvent.co.ke/"),
+    WebsiteLink(
+        "Google Drive",
+        "https://drive.google.com/",
+        "☁️",
+        "Quick access to files, folders, and team docs"
+    ),
+    WebsiteLink(
+        "YouTube",
+        "https://www.youtube.com/",
+        "▶️",
+        "Watch tutorials, learning playlists, and inspiration"
+    ),
+    WebsiteLink(
+        "Gmail",
+        "https://mail.google.com/",
+        "✉️",
+        "Jump to your inbox and keep communication moving"
+    ),
+    WebsiteLink(
+        "Google Calendar",
+        "https://calendar.google.com/",
+        "🗓️",
+        "Plan your day with focus blocks and reminders"
+    ),
+    WebsiteLink(
+        "Google Docs",
+        "https://docs.google.com/",
+        "📝",
+        "Write ideas, notes, and project briefs quickly"
+    ),
     WebsiteLink(
         "KSTVET Portal",
-        "https://kttc.mycampuscura.com/Campuscura/?TenantID=kttc&Apply=1"
+        "https://kttc.mycampuscura.com/Campuscura/?TenantID=kttc&Apply=1",
+        "🎓",
+        "Student portal for coursework and campus resources"
     ),
-    WebsiteLink("Youtube", "https://www.youtube.com/"),
-    WebsiteLink("Gmail", "https://mail.google.com/")
+    WebsiteLink(
+        "Nexinvent Solutions",
+        "https://www.nexinvent.co.ke/",
+        "🌍",
+        "Explore company resources and updates"
+    ),
+)
+
+private val creativePrompts = listOf(
+    CreativePrompt("Daily Spark", "Sketch one app idea in 5 bullets."),
+    CreativePrompt("Learning Quest", "Watch one tutorial and note 3 takeaways."),
+    CreativePrompt("Build Habit", "Ship one tiny improvement before sunset."),
 )
 
 @Composable
 fun HomeLinksScreen(modifier: Modifier = Modifier) {
     val context = LocalContext.current
 
-    Column(
+    LazyColumn(
         modifier = modifier
             .fillMaxSize()
-            .padding(horizontal = 16.dp, vertical = 24.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+            .padding(horizontal = 16.dp, vertical = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
-        Text(text = "Useful links")
+        item {
+            Card(
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer
+                )
+            ) {
+                Column(modifier = Modifier.padding(18.dp)) {
+                    Text(text = "Creative Launchpad", style = MaterialTheme.typography.headlineSmall)
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = "Open your favorite tools and start building something bold today.",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+            }
+        }
 
-        homeLinks.forEach { link ->
+        item {
+            Text(
+                text = "Creative challenges",
+                style = MaterialTheme.typography.titleMedium
+            )
+        }
+
+        items(creativePrompts) { prompt ->
+            Card {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(14.dp),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .height(38.dp)
+                            .aspectRatio(1f)
+                    ) {
+                        Text(text = "✨", fontSize = 20.sp)
+                    }
+                    Column {
+                        Text(text = prompt.title, style = MaterialTheme.typography.titleSmall)
+                        Text(text = prompt.prompt, style = MaterialTheme.typography.bodySmall)
+                    }
+                }
+            }
+        }
+
+        item {
+            Text(
+                text = "Common links",
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.padding(top = 4.dp)
+            )
+        }
+
+        items(homeLinks) { link ->
             Button(
                 onClick = {
                     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(link.url))
@@ -126,7 +238,14 @@ fun HomeLinksScreen(modifier: Modifier = Modifier) {
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text(text = link.name)
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 4.dp)
+                ) {
+                    Text(text = "${link.emoji}  ${link.name}")
+                    Text(text = link.description, style = MaterialTheme.typography.bodySmall)
+                }
             }
         }
     }
