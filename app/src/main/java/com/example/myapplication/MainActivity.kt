@@ -8,19 +8,12 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -37,7 +30,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.dp
 import com.example.myapplication.ui.theme.MyApplicationTheme
 
@@ -96,8 +88,8 @@ enum class AppDestinations(
     val label: String,
     val icon: Int,
 ) {
-    HOME("Home", R.drawable.ic_home),
     FAVORITES("Favorites", R.drawable.ic_favorite),
+    HOME("Home", R.drawable.ic_home),
     PROFILE("Profile", R.drawable.ic_account_box),
 }
 
@@ -107,8 +99,6 @@ data class WebsiteLink(
     val emoji: String,
     val description: String,
 )
-
-data class CreativePrompt(val title: String, val prompt: String)
 
 private val homeLinks = listOf(
     WebsiteLink(
@@ -155,12 +145,6 @@ private val homeLinks = listOf(
     ),
 )
 
-private val creativePrompts = listOf(
-    CreativePrompt("Daily Spark", "Sketch one app idea in 5 bullets."),
-    CreativePrompt("Learning Quest", "Watch one tutorial and note 3 takeaways."),
-    CreativePrompt("Build Habit", "Ship one tiny improvement before sunset."),
-)
-
 @Composable
 fun HomeLinksScreen(modifier: Modifier = Modifier) {
     val context = LocalContext.current
@@ -171,58 +155,12 @@ fun HomeLinksScreen(modifier: Modifier = Modifier) {
             .padding(horizontal = 16.dp, vertical = 16.dp),
         verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
-        item {
-            Card(
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer
-                )
-            ) {
-                Column(modifier = Modifier.padding(18.dp)) {
-                    Text(text = "Creative Launchpad", style = MaterialTheme.typography.headlineSmall)
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        text = "Open your favorite tools and start building something bold today.",
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                }
-            }
-        }
-
-        item {
-            Text(
-                text = "Creative challenges",
-                style = MaterialTheme.typography.titleMedium
-            )
-        }
-
-        items(creativePrompts) { prompt ->
-            Card {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(14.dp),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .height(38.dp)
-                            .aspectRatio(1f)
-                    ) {
-                        Text(text = "✨", fontSize = 20.sp)
-                    }
-                    Column {
-                        Text(text = prompt.title, style = MaterialTheme.typography.titleSmall)
-                        Text(text = prompt.prompt, style = MaterialTheme.typography.bodySmall)
-                    }
-                }
-            }
-        }
 
         item {
             Text(
                 text = "Common links",
                 style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.padding(top = 4.dp)
+                modifier = Modifier.padding(top = 4.dp, bottom = 4.dp)
             )
         }
 
